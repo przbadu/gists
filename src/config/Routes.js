@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Navigation from '../components/navbar';
 import { Gists, Gist } from '../components/gists';
@@ -12,7 +12,7 @@ function Routes() {
         <div className="container">
           <Switch>
             <Route exact path="/" component={Gists} />
-            <Route path="/g/:gistId" component={Gist} />
+            <Route exact path="/g/:gistId" component={Gist} />
           </Switch>
         </div>
       </div>
