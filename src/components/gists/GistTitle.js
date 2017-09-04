@@ -1,32 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-const styles = {
-  gistTitles: {
-    padding: 10,
-    backgroundColor: 'rgb(246, 246, 246)',
-    marginBottom: 5,
-  },
-};
-
-function GistTitle({ gist }) {
+function GistTitle({ gist, sn }) {
   return (
-    <div key={gist.id} className="col-md-6 col-lg-4">
-      <div style={styles.gistTitles}>
+    <tr>
+      <td>{sn + 1}</td>
+      <td>
         <Link to={`/g/${gist.id}`}>
           {gist.description || '[no description]'}
         </Link>
-      </div>
-    </div>
+      </td>
+    </tr>
   );
 }
-
-GistTitle.propTypes = {
-  gist: PropTypes.objectOf({
-    id: PropTypes.string,
-    description: PropTypes.string,
-  }).isRequired,
-};
 
 export default GistTitle;
