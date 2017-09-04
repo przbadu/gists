@@ -7,6 +7,7 @@ function adjustHeightWhenComplete(myFrame, myDoc) {
     let content_height =
       myFrame.contentWindow.document.documentElement.scrollHeight;
     myFrame.style.height = content_height + 'px';
+    myFrame.style.border = 'none';
   } else {
     // This will be continiously called until the iFrame is ready
     setTimeout(() => {
@@ -17,7 +18,7 @@ function adjustHeightWhenComplete(myFrame, myDoc) {
 
 class GistEmbed extends Component {
   static propTypes = {
-    gistId: PropTypes.number.isRequired,
+    gistId: PropTypes.string.isRequired,
   };
 
   componentDidMount() {

@@ -41,6 +41,8 @@ class Gist extends Component {
             <GistEmbed gistId={gist.id} />
           </div>
         )}
+
+        {errors && <p>{errors.response}</p>}
       </div>
     );
   }
