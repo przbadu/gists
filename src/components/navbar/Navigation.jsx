@@ -1,12 +1,13 @@
 import React from 'react';
-import { Navbar, Nav } from 'react-bootstrap';
+import { Navbar } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 function Navigation() {
   return (
     <Navbar>
       <Navbar.Header>
         <Navbar.Brand>
-          <a href="#">Gists</a>
+          <Link to="/">Gists</Link>
         </Navbar.Brand>
       </Navbar.Header>
     </Navbar>

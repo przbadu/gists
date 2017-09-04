@@ -1,0 +1,21 @@
+.loading-wrapper {
+  text-align: center;
+  width: 80px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+
+.loading {
+  animation: loading-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes loading-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
