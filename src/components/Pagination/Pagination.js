@@ -1,22 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Pagination({ pagination, onClick }) {
+function Pagination({ onClick }) {
   return (
-    <div className="pagination">
-      <div className="clearfix" />
-      <div className="col-sm-12">
-        <button className="btn btn-lg btn-primary" onClick={onClick}>
-          Load More
-        </button>
-      </div>
-    </div>
+    <button className="btn btn-lg btn-primary" onClick={onClick}>
+      Load More
+    </button>
   );
 }
 
 Pagination.propTypes = {
-  pagination: PropTypes.object,
-  onClick: PropTypes.func,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default Pagination;

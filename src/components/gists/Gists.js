@@ -1,56 +1,36 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import paginator from 'parse-link-header';
 
+// components
 import Loading from '../Loading';
 import GistTitle from './GistTitle';
 import Pagination from '../Pagination';
 
-import { loadGists } from './../../utils/gists';
+// actions
+import { findAllGists } from '../../actions/gists';
 
 class Gists extends Component {
-  state = {
-    gists: null,
-    loading: true,
-    errors: null,
-    pagination: null,
+  static propTypes = {
+    findAllGists: PropTypes.func.isRequired,
   };
 
-  constructor() {
-    super();
-    this.loadMore = this.loadMore.bind(this);
-  }
-
   componentDidMount() {
-    loadGists()
-      .then(response => {
-        const gists = response.data;
-        const pagination = paginator(response.headers.link);
-        this.setState({ gists, pagination, loading: false });
-      })
-      .catch(errors => {
-        this.setState({ loading: false, errors });
-      });
+    const defaultPagination = { next: { page: 1, per_page: 10 } };
+    this.props.findAllGists(defaultPagination);
   }
 
-  loadMore() {
-    loadGists()
-      .then(response => {
-        debugger;
-        const gists = { ...this.state.gists, ...response.data };
-        const pagination = paginator(response.headers.link);
-        this.setState({ gists, pagination, loading: false });
-      })
-      .catch(errors => {
-        this.setState({ loading: false, errors });
-      });
-  }
+  handleOnClick = () => {
+    this.props.findAllGists(this.props.pagination);
+  };
 
   render() {
-    const { errors, gists, pagination, loading } = this.state;
+    const { gists, pagination, loading, errors } = this.props;
+
     if (loading === true) return <Loading />;
-    if (gists === null) return <h2>No gists to display</h2>;
     if (errors === null) return <p className="text-danger">{errors.message}</p>;
+    if (gists === null) return <h2>No gists to display</h2>;
 
     return (
       <div className="table-responsive">
@@ -69,13 +49,14 @@ class Gists extends Component {
                 <GistTitle sn={i} key={gist.id} gist={gist} />
               ))}
 
-            <tr>
-              <td colSpan="2">
-                {pagination && (
-                  <Pagination pagination={pagination} onClick={this.loadMore} />
-                )}
-              </td>
-            </tr>
+            {pagination &&
+            pagination.next && (
+              <tr>
+                <td colSpan="2">
+                  <Pagination onClick={this.handleOnClick} />
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
@@ -83,4 +64,16 @@ class Gists extends Component {
   }
 }
 
-export default Gists;
+const mapStateToProps = state => {
+  const { data, errors, headerLink, loading } = state.gists;
+  const pagination = paginator(headerLink);
+
+  return {
+    gists: data,
+    pagination,
+    loading,
+    errors,
+  };
+};
+
+export default connect(mapStateToProps, { findAllGists })(Gists);
