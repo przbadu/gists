@@ -23,11 +23,13 @@ class Gists extends Component {
   }
 
   handleOnNextClick = () => {
-    this.props.findAllGists(this.props.pagination.next);
+    this.props.pagination.next &&
+      this.props.findAllGists(this.props.pagination.next);
   };
 
   handleOnPreviousClick = () => {
-    this.props.findAllGists(this.props.pagination.prev);
+    this.props.pagination.prev &&
+      this.props.findAllGists(this.props.pagination.prev);
   };
 
   renderPagination(pagination) {
