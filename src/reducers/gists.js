@@ -1,7 +1,10 @@
 import {
-  LOAD_ALL_GISTS,
+  ADD_LOADING,
+  REMOVE_LOADING,
   LOAD_ALL_GISTS_SUCCESS,
   LOAD_ALL_GISTS_FAILURE,
+  LOAD_GIST_SUCCESS,
+  LOAD_GIST_FAILURE,
 } from '../actionTypes';
 
 const initialState = {
@@ -13,18 +16,24 @@ const initialState = {
 
 const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
-    case LOAD_ALL_GISTS:
+    case ADD_LOADING:
       return { loading: true };
+    case REMOVE_LOADING:
+      return { loading: false };
     case LOAD_ALL_GISTS_SUCCESS:
       return {
         ...state,
         data: action.payload.data,
-        loading: false,
         headerLink: action.payload.headerLink,
       };
     case LOAD_ALL_GISTS_FAILURE:
       return {
-        loading: false,
+        errors: { global: action.message },
+      };
+    case LOAD_GIST_SUCCESS:
+      return action.data;
+    case LOAD_GIST_FAILURE:
+      return {
         errors: { global: action.message },
       };
     default:

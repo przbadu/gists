@@ -1,61 +1,50 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-// import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
+// components
 import Loading from '../Loading';
 import GistEmbed from '../GistEmbed';
 
-class Gist extends Component {
-  constructor(props) {
-    super(props);
+// actions
+import { findGist } from '../../actions/gists';
 
-    this.state = {
-      gistId: this.props.match.params.gistId,
-      gist: null,
-      errors: null,
-      loading: true,
-    };
-  }
+class Gist extends Component {
+  static propTypes = {
+    findGist: PropTypes.func.isRequired,
+  };
 
   componentDidMount() {
-    const { gistId } = this.state;
-
-    fetch(`https://api.github.com/gists/${gistId}`)
-      .then(res => res.json())
-      .then(gist => {
-        this.setState({ gist, loading: false });
-      })
-      .catch(errors => {
-        this.setState({ loading: false, errors });
-      });
+    const { gistId } = this.props.match.params;
+    this.props.findGist(gistId);
   }
 
   render() {
-    const { gist, loading, errors } = this.state;
+    const { gist } = this.props;
 
     return (
       <div className="col-sm-12">
-        {loading === true ? (
-          <Loading />
-        ) : (
-          <div className="gist-desc">
-            <nav aria-label="Page navigation">
-              <ul className="pager">
-                <li className="previous">
-                  <Link to="/">
-                    <span aria-hidden="true">&larr;</span> Go Back
-                  </Link>
-                </li>
-              </ul>
-            </nav>
-            <h2>{gist.description}</h2>
-            <GistEmbed gistId={gist.id} />
-          </div>
-        )}
-
-        {errors && <p>{errors.response}</p>}
+        <div className="gist-desc">
+          <nav aria-label="Page navigation">
+            <ul className="pager">
+              <li className="previous">
+                <Link to="/">
+                  <span aria-hidden="true">&larr;</span> Go Back
+                </Link>
+              </li>
+            </ul>
+          </nav>
+          <h2>{gist.description}</h2>
+          {gist.id && <GistEmbed gistId={gist.id} />}
+        </div>
       </div>
     );
   }
 }
 
-export default Gist;
+const mapStateToProps = state => {
+  return { gist: state.gists };
+};
+
+export default connect(mapStateToProps, { findGist })(Gist);

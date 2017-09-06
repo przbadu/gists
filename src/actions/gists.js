@@ -1,13 +1,12 @@
 import api from '../api';
 import {
-  LOAD_ALL_GISTS,
   LOAD_ALL_GISTS_SUCCESS,
   LOAD_ALL_GISTS_FAILURE,
+  LOAD_GIST_SUCCESS,
+  LOAD_GIST_FAILURE,
 } from '../actionTypes';
 
-export const loadAllGists = () => ({
-  type: LOAD_ALL_GISTS,
-});
+import { addLoading, removeLoading } from './loading';
 
 export const loadAllGistsSuccess = response => ({
   type: LOAD_ALL_GISTS_SUCCESS,
@@ -22,16 +21,42 @@ export const loadAllGistsFailure = errors => ({
   message: errors.response,
 });
 
-export const findAllGists = pagination => dispatch => {
-  // initiating fetch api
-  dispatch({ type: LOAD_ALL_GISTS });
+export const loadGistSuccess = response => ({
+  type: LOAD_GIST_SUCCESS,
+  data: response.data,
+});
 
-  // fetch api
+export const loadGistFailure = errors => ({
+  type: LOAD_GIST_FAILURE,
+  message: errors.response,
+});
+
+export const findAllGists = pagination => dispatch => {
+  dispatch(addLoading());
+
   api.gist
     .findAll(pagination)
-    .then(response => dispatch(loadAllGistsSuccess(response)))
+    .then(response => {
+      dispatch(removeLoading());
+      dispatch(loadAllGistsSuccess(response));
+    })
     .catch(errors => {
-      console.log(`Error: ${errors.message}`);
+      dispatch(removeLoading());
       dispatch(loadAllGistsFailure(errors));
+    });
+};
+
+export const findGist = gistId => dispatch => {
+  dispatch(addLoading());
+
+  api.gist
+    .find(gistId)
+    .then(response => {
+      dispatch(removeLoading());
+      dispatch(loadGistSuccess(response));
+    })
+    .catch(errors => {
+      dispatch(removeLoading());
+      dispatch(loadGistFailure(errors));
     });
 };
