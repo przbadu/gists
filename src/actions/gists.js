@@ -30,5 +30,8 @@ export const findAllGists = pagination => dispatch => {
   api.gist
     .findAll(pagination)
     .then(response => dispatch(loadAllGistsSuccess(response)))
-    .catch(errors => dispatch(loadAllGistsFailure(errors)));
+    .catch(errors => {
+      console.log(`Error: ${errors.message}`);
+      dispatch(loadAllGistsFailure(errors));
+    });
 };

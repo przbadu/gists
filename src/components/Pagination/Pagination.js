@@ -1,16 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
-function Pagination({ onClick }) {
+function Pagination({ pagination, onNextClick, onPreviousClick }) {
   return (
-    <button className="btn btn-lg btn-primary" onClick={onClick}>
-      Load More
-    </button>
+    <nav aria-label="Page navigation">
+      <ul className="pager">
+        <li
+          className={classNames('previous', { disabled: !!!pagination.prev })}
+        >
+          <a role="navigation" onClick={onPreviousClick}>
+            <span aria-hidden="true">&larr;</span> Prev
+          </a>
+        </li>
+        <li className={classNames('next', { disabled: !!!pagination.next })}>
+          <a role="navigation" onClick={onNextClick}>
+            Next <span aria-hidden="true">&rarr;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
   );
 }
 
 Pagination.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  onNextClick: PropTypes.func.isRequired,
+  onPreviousClick: PropTypes.func.isRequired,
+  pagination: PropTypes.object,
 };
 
 export default Pagination;

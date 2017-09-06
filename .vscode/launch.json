@@ -6,10 +6,17 @@
   "configurations": [
     {
       "type": "chrome",
+      "request": "attach",
+      "name": "Debug React",
+      "port": 9222,
+      "webRoot": "${workspaceRoot}"
+    },
+    {
+      "type": "chrome",
       "request": "launch",
-      "name": "Launch React",
+      "name": "Run React",
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceRoot}/src"
+      "webRoot": "${workspaceRoot}"
     }
   ]
 }

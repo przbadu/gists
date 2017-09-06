@@ -14,16 +14,37 @@ import { findAllGists } from '../../actions/gists';
 class Gists extends Component {
   static propTypes = {
     findAllGists: PropTypes.func.isRequired,
+    pagination: PropTypes.object,
   };
 
   componentDidMount() {
     const defaultPagination = { next: { page: 1, per_page: 10 } };
-    this.props.findAllGists(defaultPagination);
+    this.props.findAllGists(defaultPagination.next);
   }
 
-  handleOnClick = () => {
-    this.props.findAllGists(this.props.pagination);
+  handleOnNextClick = () => {
+    this.props.findAllGists(this.props.pagination.next);
   };
+
+  handleOnPreviousClick = () => {
+    this.props.findAllGists(this.props.pagination.prev);
+  };
+
+  renderPagination(pagination) {
+    if (pagination)
+      return (
+        <tr>
+          <td colSpan="2">
+            <Pagination
+              pagination={pagination}
+              onNextClick={this.handleOnNextClick}
+              onPreviousClick={this.handleOnPreviousClick}
+            />
+          </td>
+        </tr>
+      );
+    return null;
+  }
 
   render() {
     const { gists, pagination, loading, errors } = this.props;
@@ -42,6 +63,7 @@ class Gists extends Component {
                 <h2>My Gists</h2>
               </th>
             </tr>
+            {this.renderPagination(pagination)}
           </thead>
           <tbody>
             {gists &&
@@ -49,14 +71,7 @@ class Gists extends Component {
                 <GistTitle sn={i} key={gist.id} gist={gist} />
               ))}
 
-            {pagination &&
-            pagination.next && (
-              <tr>
-                <td colSpan="2">
-                  <Pagination onClick={this.handleOnClick} />
-                </td>
-              </tr>
-            )}
+            {this.renderPagination(pagination)}
           </tbody>
         </table>
       </div>
