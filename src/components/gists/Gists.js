@@ -18,7 +18,7 @@ class Gists extends Component {
   };
 
   componentDidMount() {
-    const defaultPagination = { next: { page: 1, per_page: 10 } };
+    const defaultPagination = { next: { page: 1, per_page: 100 } };
     this.props.findAllGists(defaultPagination.next);
   }
 
